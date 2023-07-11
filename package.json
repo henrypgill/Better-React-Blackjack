@@ -13,7 +13,8 @@
     "test": "vitest --no-watch --reporter verbose",
     "test:watch": "vitest --reporter verbose",
     "test:gui": "vitest --ui",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "deploy": "git add -A && git commit -m \"quick commit\" && git push origin main"
   },
   "dependencies": {
     "react": "^18.2.0",

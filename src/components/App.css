@@ -1,3 +1,69 @@
 html {
-    background: #f8f8f8;
-}
+    font-family: Poppins;
+    font-size: 16px;
+    border: 1px solid black;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    padding: 8px;
+    margin: 0px;
+    border: 1px solid black;
+  }
+  h2 {
+    font-size: 1.5rem;
+    padding: 0px;
+    margin: 0px;
+    border: 1px solid black;
+  }
+  p {
+    font-size: 1rem;
+    padding: 0px;
+    margin: 0px;
+    border: 1px solid black;
+  }
+  div {
+    border: 1px solid black;
+  }
+  
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  
+  .card-header {
+    font-size: 0.75rem;
+    text-align: center;
+    height: 40px;
+    width: 100%;
+  }
+  
+  .card-image {
+    width: 45px;
+    height: 63px;
+    object-fit: contain;
+  }
+  
+  .playing-card {
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin: 8px 8px;
+  }
+  
+  .game-hands-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+  
+  
+  .hand-of-cards-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
