@@ -1,5 +1,5 @@
 
-import './style.css';
+import './app.css';
 import PlayingCard from './PlayingCard';
 import shuffleCurrentDeck from './Utils/shuffleDeck';
 import drawNewCard from './Utils/drawNewCard';
