@@ -44,15 +44,26 @@ export default function App() {
 
   useEffect(() => {
     handleReset();
-  }, []);
+  }, [/*playersTurn, waitingForCards, roundState, playerCards, dealerCards*/]);
 
-  const checkRoundState = () =>
-    setRoundState(checkWinOrLose(playersTurn, playerCards, dealerCards));
 
   const addCardToPlayersHand = (card: Card) =>
     setPlayerCards((prev) => [...prev, card]);
   const addCardToDealersHand = (card: Card) =>
     setDealerCards((prev) => [...prev, card]);
+
+    
+  async function handleReset() {
+    if (!waitingForCards){
+    setPlayersTurn(0);
+    setWaitingForCards(true);
+    setRoundState('Playing');
+    setPlayerCards([]);
+    setDealerCards([]);
+    await shuffleCurrentDeck().then(() => dealFirstFourCards());
+    setWaitingForCards(false);
+}
+  }
 
   async function dealFirstFourCards() {
     await drawNewCard().then((result) => addCardToDealersHand(result));
@@ -62,40 +73,52 @@ export default function App() {
   }
 
   async function handlePlayerHit() {
-    if (playersTurn === 0 && !waitingForCards) {
-      setWaitingForCards(true);
-      await drawNewCard()
-        .then((result) => addCardToPlayersHand(result))
-        .then(() => setWaitingForCards(false));
-    }
-    checkRoundState();
+    await playerDraw()//.then(() => setRoundState(checkWinOrLose(playersTurn, playerCards, dealerCards)));
+    setRoundState(checkWinOrLose(playersTurn, playerCards, dealerCards));
   }
+
+  async function playerDraw(): Promise<void> {
+    if (playersTurn === 0 && !waitingForCards) {
+        setWaitingForCards(true);
+        // console.log(roundState)
+        await drawNewCard()
+          .then((result) => addCardToPlayersHand(result))
+          .then(() => setWaitingForCards(false));
+        // console.log(roundState)
+      }
+  }
+
   function handlePlayerStick() {
     setPlayersTurn(1);
   }
 
   async function handleDealerTurn() {
+    await dealerDraw().then(() => setRoundState(checkWinOrLose(playersTurn, playerCards, dealerCards)));
     if (
-      playersTurn === 1 &&
-      !waitingForCards &&
-      getHandScore(dealerCards) < 19
-    ) {
-      setWaitingForCards(true);
-      await drawNewCard()
-        .then((result) => addCardToDealersHand(result))
-        .then(() => setWaitingForCards(false));
-    }
+        playersTurn === 1 &&
+        !waitingForCards &&
+        getHandScore(dealerCards) >= 19
+      ) {
+        setPlayersTurn(2);
+        // console.log(roundState)
+      }
   }
 
-  async function handleReset() {
-    setPlayersTurn(0);
-    setWaitingForCards(true);
-    setRoundState('Playing');
-    setPlayerCards([]);
-    setDealerCards([]);
-    await shuffleCurrentDeck().then(() => dealFirstFourCards());
-    setWaitingForCards(false);
+  async function dealerDraw(): Promise<void> {
+    if (
+        playersTurn === 1 &&
+        !waitingForCards &&
+        getHandScore(dealerCards) < 19
+      ) {
+        setWaitingForCards(true);
+        console.log(roundState)
+        await drawNewCard()
+          .then((result) => addCardToDealersHand(result))
+          .then(() => setWaitingForCards(false));
+        console.log(roundState)
+      }
   }
+
 
   return (
     <>
@@ -106,15 +129,15 @@ export default function App() {
       <div className="game-container">
         <h2>{roundState}</h2>
         <div className="button-container">
-          <button className="hit-button" onClick={handlePlayerHit}>
+          { playersTurn === 0 && <button className="hit-button" onClick={handlePlayerHit}>
             Hit
-          </button>
-          <button className="stick-button" onClick={handlePlayerStick}>
+          </button>}
+          { playersTurn === 0 && <button className="stick-button" onClick={handlePlayerStick}>
             Stick
-          </button>
-          <button className="stick-button" onClick={handleDealerTurn}>
+          </button>}
+          { playersTurn === 1 && <button className="advance-button" onClick={handleDealerTurn}>
             Advance
-          </button>
+          </button>}
           <button className="reset-button" onClick={handleReset}>
             Reset
           </button>
