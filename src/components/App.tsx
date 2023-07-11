@@ -1,5 +1,4 @@
 
-import './app.css';
 import PlayingCard from './PlayingCard';
 import shuffleCurrentDeck from './Utils/shuffleDeck';
 import drawNewCard from './Utils/drawNewCard';
@@ -7,6 +6,7 @@ import getHandScore from './Utils/getHandScore';
 import { Card } from './Types/CardInterfaces';
 import { useEffect, useState } from 'react';
 import { checkWinOrLose } from './Utils/checkWinOrLose';
+import './App.css';
 
 type WinState = 'Win' | 'Lose' | 'Playing';
 type Turn = 0 | 1 | 2;
